@@ -5,8 +5,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require("./db/conn");
 const authenticateToken = require('./middleware/authenticateToken');
-
-
 const User = require("./models/users");
 const Blog =require("./models/blog");
 const app = express();
@@ -98,13 +96,13 @@ app.post('/signup', async (req, res) => {
 
 
      //  --------- posting blogs ---------------//
+    
 
-  
    // Route for posting a blog
      app.post('/post-blog', authenticateToken, async (req, res) => {
      const { name, content, imageURL } = req.body;
-     const userId = req.user.userId; // Extracting user ID from the authenticated request
-
+     const userId = req.user._id;
+      // Extracting user ID from the authenticated request
     try {
       // Create blog post
        const newBlog = new Blog({
@@ -126,7 +124,7 @@ app.post('/signup', async (req, res) => {
 
 
 
-  const PORT = process.env.PORT || 4000;
+  const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
    console.log(`Server is running on port ${PORT}`);
     });

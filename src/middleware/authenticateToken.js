@@ -8,11 +8,11 @@ function authenticateToken(req, res, next) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    jwt.verify(token, 'secret_key', (err, user) => {
+    jwt.verify(token, 'secret_key', (err, decoded) => {
         if (err) {
             return res.status(403).json({ message: 'Forbidden' });
         }
-        req.user = user; // Attach user object to the request for further use
+        req.user = decoded; // Attach decoded user object to the request for further use
         next();
     });
 }
