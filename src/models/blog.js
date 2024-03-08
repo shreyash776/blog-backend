@@ -8,10 +8,11 @@ const blogSchema = new mongoose.Schema({
         ref: 'User', // Reference to the User model
         required: true
     },
-    name: {
+    title: {
         type: String,
         required: true
     },
+
     content: {
         type: String,
         required: true

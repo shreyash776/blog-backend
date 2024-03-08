@@ -101,16 +101,18 @@ app.post('/signup', async (req, res) => {
      //  --------- posting blogs ---------------//
     
 
-   // Route for posting a blog
+   // <--------------Route for posting a blog------------>
      app.post('/post-blog', authenticateToken, async (req, res) => {
-     const { name, content, imageURL } = req.body;
+     const { title, content, imageURL } = req.body;
      const userId = req.user._id;
+     const author_mail=req.user.email;
       // Extracting user ID from the authenticated request
     try {
       // Create blog post
        const newBlog = new Blog({
           user: userId, // Assigning the user ID to the user field   
-          name,
+          author:author_mail,
+          title,
           content,
           imageURL
        });
@@ -119,11 +121,12 @@ app.post('/signup', async (req, res) => {
 
       res.status(201).json({ message: 'Blog posted successfully' });
   } catch (error) {
+    console.log("actual error:",error)
       res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-
+ 
 
 
 
@@ -151,6 +154,84 @@ app.post('/comments',authenticateToken,async (req, res) => {
 });
 
 
+
+
+// <-------------- route for deleting blog ------------------>
+
+app.delete('/delete-blog/:blogId', authenticateToken, async (req, res) => {
+  const blogId = req.params.blogId;
+  const userId = req.user._id; // Extracting user ID from the authenticated request
+  
+  try {
+    // Check if the blog post exists and belongs to the authenticated user
+    const blog = await Blog.findOne({ _id: blogId, user: userId });
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found or unauthorized' });
+    }
+
+    // Delete the blog post
+    await Blog.deleteOne({ _id: blogId });
+
+    res.status(200).json({ message: 'Blog deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting blog:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+// <--------------searching blogs ---------------->
+app.get('/search-blogs',authenticateToken, async (req, res) => {
+  const { name, author } = req.query;
+
+  try {
+    let query = {};
+
+    if (name) {
+      query.name = { $regex: new RegExp(name, 'i') }; // Case-insensitive search for name
+    }
+    if (author) {
+      query.author = { $regex: new RegExp(author, 'i') }; // Case-insensitive search for author
+    }
+
+    // Find blogs based on the constructed query
+    const blogs = await Blog.find(query);
+
+    res.status(200).json(blogs);
+  } catch (error) {
+    console.error('Error searching blogs:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+//   <------------------Editing the blogs -------------------->
+
+app.patch('/edit-blog/:blogId', authenticateToken, async (req, res) => {
+  const blogId = req.params.blogId;
+  const userId = req.user._id; // Extracting user ID from the authenticated request
+  const { content } = req.body;
+
+  try {
+    // Check if the blog post exists and belongs to the authenticated user
+    const blog = await Blog.findOne({ _id: blogId, user: userId });
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found or unauthorized' });
+    }
+
+    // Update the content field
+    if (content) {
+      blog.content = content;
+    }
+
+    // Save the updated blog post
+    await blog.save();
+
+    res.status(200).json({ message: 'Blog content updated successfully', blog });
+  } catch (error) {
+    console.error('Error updating blog content:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 
 
