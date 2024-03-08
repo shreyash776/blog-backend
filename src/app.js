@@ -3,12 +3,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
 require("./db/conn");
 const authenticateToken = require('./middleware/authenticateToken');
 const User = require("./models/users");
 const Blog =require("./models/blog");
+const Comment =require("./models/comments");
 const app = express();
 app.use(express.json());
+app.use(bodyParser.json());
 
 // Signup route
 app.post('/signup', async (req, res) => {
@@ -119,6 +122,40 @@ app.post('/signup', async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+
+
+
+
+     //      <------- POST endpoint for submitting comments ---------->
+
+app.post('/comments',authenticateToken,async (req, res) => {
+  try { 
+    const { blogPostId,comment } = req.body;
+    const userId = req.user._id;
+    // Create a new comment document
+    const newComment = new Comment({
+      blogPostId,
+      user: userId,
+      comment
+    });
+
+    // Save the new comment to the database
+    await newComment.save();
+
+    res.status(201).json({ message: 'Comment posted successfully.' });
+  } catch (error) {
+    console.error('Error posting comment:', error);
+    res.status(500).json({ error: 'Failed to post comment.' });
+  }
+});
+
+
+
+
+
+
+
 
 
 
