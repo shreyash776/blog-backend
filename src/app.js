@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
-require("./db/conn");
+  require("./db/conn");
 const authenticateToken = require('./middleware/authenticateToken');
 const User = require("./models/users");
 const Blog =require("./models/blog");
@@ -12,6 +12,8 @@ const Comment =require("./models/comments");
 const app = express();
 app.use(express.json());
 app.use(bodyParser.json());
+require('dotenv').config();
+const secretKey = process.env.JWT_SECRET;
 
 // Signup route
 app.post('/signup', async (req, res) => {
@@ -33,11 +35,11 @@ app.post('/signup', async (req, res) => {
   
       // Generate JWT token
       // const token = jwt.sign({ email: newUser.email }, 'secret_key');
-      const token = jwt.sign({ _id: newUser._id.toString(), email: newUser.email }, 'secret_key');
+      const token = jwt.sign({ _id: newUser._id.toString(), email: newUser.email }, secretKey);
 
       
       res.status(201).json({ message: 'User created', token });
-    } catch (error) {
+    } catch (error) { 
       res.status(500).json({ message: 'Internal server error' });
     }
   });
@@ -60,16 +62,10 @@ app.post('/signup', async (req, res) => {
       }
   
       // Generate JWT token
-      // const token = jwt.sign({ email: user.email }, 'secret_key');
+      
       const token = jwt.sign({ _id: user._id.toString(), email: user.email }, 'secret_key');
 
       console.log(token);
-
-      //decode the token
-      // const data=jwt.decode(token);
-
-
-      
       res.status(200).json({ message: 'Login successful', token });
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
@@ -77,28 +73,11 @@ app.post('/signup', async (req, res) => {
   });
   
 
-  
-       // Protect route with JWT authentication
-           // app.get('/protected', (req, res) => {
-           //     const token = req.headers.authorization;
-  
-           //     if (!token) {
-           //       return res.status(401).json({ message: 'Unauthorized' });
-           //     }
-  
-           //     jwt.verify(token, 'secret_key', (err, decoded) => {
-           //       if (err) {
-           //         return res.status(403).json({ message: 'Forbidden' });
-           //       }
-  
-           //       res.status(200).json({ message: 'Welcome to protected route' });
-           //     });
-           //   });
-
-           // Start the server
 
 
-     //  --------- posting blogs ---------------//
+
+
+     //  <--------- posting blogs --------------->
     
 
    // <--------------Route for posting a blog------------>
@@ -106,6 +85,7 @@ app.post('/signup', async (req, res) => {
      const { title, content, imageURL } = req.body;
      const userId = req.user._id;
      const author_mail=req.user.email;
+     console.log(author_mail);
       // Extracting user ID from the authenticated request
     try {
       // Create blog post
@@ -119,7 +99,7 @@ app.post('/signup', async (req, res) => {
 
       await newBlog.save();
 
-      res.status(201).json({ message: 'Blog posted successfully' });
+      res.status(201).json({ message: 'Blog posted successfully',newBlog });
   } catch (error) {
     console.log("actual error:",error)
       res.status(500).json({ message: 'Internal server error' });
@@ -127,6 +107,9 @@ app.post('/signup', async (req, res) => {
 });
 
  
+
+
+
 
 
 
@@ -156,6 +139,9 @@ app.post('/comments',authenticateToken,async (req, res) => {
 
 
 
+
+
+
 // <-------------- route for deleting blog ------------------>
 
 app.delete('/delete-blog/:blogId', authenticateToken, async (req, res) => {
@@ -178,6 +164,12 @@ app.delete('/delete-blog/:blogId', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+
+
+
+
+
 
 
 // <--------------searching blogs ---------------->
@@ -203,6 +195,11 @@ app.get('/search-blogs',authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+
+
+
+
 
 //   <------------------Editing the blogs -------------------->
 
