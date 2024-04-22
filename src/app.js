@@ -106,7 +106,28 @@ app.post('/signup', async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
   }
 });
+  
 
+   
+
+ // route to get the blogs from data base
+   app.get('/get-blogs', async (req, res) => {
+   try {
+    // Fetch all blogs from the database
+    const blogs = await Blog.find();
+
+    // If there are no blogs, return a 404 status
+    if (!blogs || blogs.length === 0) {
+      return res.status(404).json({ message: 'No blogs found' });
+    }
+
+    // If there are blogs, return them
+    res.status(200).json({ blogs });
+  } catch (error) {
+    console.log("actual error:",error)
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
  
 
 
