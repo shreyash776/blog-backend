@@ -10,8 +10,14 @@ const blogSchema = new mongoose.Schema({
     },
     author:{
         type:String, 
+        required:true
 
     },
+    author_mail:{
+        type:String,
+        required:true,
+    }
+    ,
     title: {
         type: String,
         required: true
@@ -24,6 +30,10 @@ const blogSchema = new mongoose.Schema({
     imageURL: {
         type: String,
         required: true
+    },
+    visibility:{
+        type:String,
+        required:true
     }
 
 

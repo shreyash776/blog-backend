@@ -37,7 +37,7 @@ app.post('/signup', async (req, res) => {
   
       // Generate JWT token
       // const token = jwt.sign({ email: newUser.email }, 'secret_key');
-      const token = jwt.sign({ _id: newUser._id.toString(), email: newUser.email }, secretKey);
+      const token = jwt.sign({ _id: newUser._id.toString(), email: newUser.email,name:newUser.name }, secretKey);
 
       
       res.status(201).json({ message: 'User created', token });
@@ -65,7 +65,7 @@ app.post('/signup', async (req, res) => {
   
       // Generate JWT token
       
-      const token = jwt.sign({ _id: user._id.toString(), email: user.email }, 'secret_key');
+      const token = jwt.sign({ _id: user._id.toString(), email: user.email, name:user.name }, 'secret_key');
 
       console.log(token);
       res.status(200).json({ message: 'Login successful', token });
@@ -75,28 +75,27 @@ app.post('/signup', async (req, res) => {
   });
   
 
-
-
-
-
      //  <--------- posting blogs --------------->
     
 
    // <--------------Route for posting a blog------------>
      app.post('/post-blog', authenticateToken, async (req, res) => {
-     const { title, content, imageURL } = req.body;
+     const {title,content,imageURL,visibility } = req.body;
      const userId = req.user._id;
      const author_mail=req.user.email;
+     const author_name=req.user.name;
      console.log(author_mail);
       // Extracting user ID from the authenticated request
     try {
       // Create blog post
        const newBlog = new Blog({
           user: userId, // Assigning the user ID to the user field   
-          author:author_mail,
+          author:author_name,
+          author_mail:author_mail,
           title,
           content,
-          imageURL
+          imageURL,
+          visibility,
        });
 
       await newBlog.save();
@@ -120,11 +119,13 @@ app.post('/signup', async (req, res) => {
 app.post('/comments',authenticateToken,async (req, res) => {
   try { 
     const { blogPostId,comment } = req.body;
-    const userId = req.user._id;
-    // Create a new comment document
+    const commentedBy = req.user.name;
+    const commentedByEmail=req.user.email;
+    // Create a new comment document 
     const newComment = new Comment({
       blogPostId,
-      user: userId,
+      commentedByEmail:commentedByEmail,
+      commentedBy:commentedBy,
       comment
     });
 
@@ -231,14 +232,6 @@ app.patch('/edit-blog/:blogId', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-
-
-
-
-
-
-
 
 
   const PORT = process.env.PORT || 5000;

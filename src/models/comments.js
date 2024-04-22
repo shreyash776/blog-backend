@@ -1,15 +1,21 @@
 const mongoose = require('mongoose');
-
-
 const commentSchema = new mongoose.Schema({
   
-    user: {
+    commentedBy:{
+        type:String ,
+        required:true
+    },
+    commentedByEmail:{
+        type:String,
+        required:true
+    }
+    ,
+    blogPostId:
+     { 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // Reference to the User model
         required: true
-    },
-    blogPostId:
-     { type: String, required: true },
+      },
 
     comment: {
         type: String,
@@ -18,11 +24,9 @@ const commentSchema = new mongoose.Schema({
    
     timestamp:
      { type: Date,
-         default: Date.now }
-
+       default: Date.now }
 
 });
-
 
 
 
