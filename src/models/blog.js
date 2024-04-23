@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const blogSchema = new mongoose.Schema({
-  
+   
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // Reference to the User model
@@ -34,6 +34,11 @@ const blogSchema = new mongoose.Schema({
     visibility:{
         type:String,
         required:true
+    }
+    ,
+    updatedAt: {
+        type: String,
+        default: () => moment().format('YYYY-MM-DD HH:mm:ss')
     }
 
 

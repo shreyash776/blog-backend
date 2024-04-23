@@ -114,8 +114,7 @@ app.post('/signup', async (req, res) => {
    app.get('/get-blogs', async (req, res) => {
    try {
     // Fetch all blogs from the database
-    const blogs = await Blog.find();
-
+    const blogs = await Blog.find();   
     // If there are no blogs, return a 404 status
     if (!blogs || blogs.length === 0) {
       return res.status(404).json({ message: 'No blogs found' });
@@ -160,7 +159,20 @@ app.post('/comments',authenticateToken,async (req, res) => {
   }
 });
 
-
+   //<-------------route for getting the comments --------------->
+   app.get('/get-comments/:blogPostId', async (req, res) => {
+    try {
+      const { blogPostId } = req.params;
+      
+      // Find comments associated with the specified blog post ID
+      const comments = await Comment.find({ blogPostId });
+  
+      res.status(200).json({ comments });
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      res.status(500).json({ error: 'Failed to fetch comments.' });
+    }
+  });
 
 
 
