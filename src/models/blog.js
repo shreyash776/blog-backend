@@ -38,7 +38,7 @@ const blogSchema = new mongoose.Schema({
     ,
     updatedAt: {
         type: String,
-        default: () => moment().format('YYYY-MM-DD HH:mm:ss')
+        default: Date.now
     }
 
 

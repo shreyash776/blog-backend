@@ -127,8 +127,10 @@ app.post('/signup', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
- 
 
+
+
+  
 
 
 
@@ -209,33 +211,23 @@ app.delete('/delete-blog/:blogId', authenticateToken, async (req, res) => {
 
 
 // <--------------searching blogs ---------------->
-app.get('/search-blogs',authenticateToken, async (req, res) => {
-  const { name, author } = req.query;
+// Search endpoint
+app.get('/search-blogs', async (req, res) => {
+  const {query} = req.query; // Query parameter for search term
 
-  try {
-    let query = {};
-
-    if (name) {
-      query.name = { $regex: new RegExp(name, 'i') }; // Case-insensitive search for name
-    }
-    if (author) {
-      query.author = { $regex: new RegExp(author, 'i') }; // Case-insensitive search for author
-    }
-
-    // Find blogs based on the constructed query
-    const blogs = await Blog.find(query);
-
-    res.status(200).json(blogs);
-  } catch (error) {
-    console.error('Error searching blogs:', error);
-    res.status(500).json({ message: 'Internal server error' });
+  if (!query) {
+      return res.status(400).json({ error: 'Query parameter is required.' });
   }
+  const blogs = await Blog.find();   
+    
+  const searchResults = blogs.filter(blog =>
+      blog.title.toLowerCase().includes(query.toLowerCase()) ||
+      blog.author.toLowerCase().includes(query.toLowerCase())
+  );
+
+  res.json({searchResults});
+
 });
-
-
-
-
-
 
 //   <------------------Editing the blogs -------------------->
 
