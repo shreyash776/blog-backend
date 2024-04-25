@@ -231,14 +231,16 @@ app.get('/search-blogs', async (req, res) => {
 
 //   <------------------Editing the blogs -------------------->
 
-app.patch('/edit-blog/:blogId', authenticateToken, async (req, res) => {
-  const blogId = req.params.blogId;
-  const userId = req.user._id; // Extracting user ID from the authenticated request
-  const { content } = req.body;
+app.patch('/edit-blog', authenticateToken, async (req, res) => {
+  const blogId = req.body.blogId;
+  // const userId = req.user._id; // Extracting user ID from the authenticated request
+  const visibility=req.body.visibility;
+  const {content} = req.body;
 
   try {
     // Check if the blog post exists and belongs to the authenticated user
-    const blog = await Blog.findOne({ _id: blogId, user: userId });
+    console.log(req.body)
+    const blog = await Blog.findOne({ _id: blogId });
     if (!blog) {
       return res.status(404).json({ message: 'Blog not found or unauthorized' });
     }
@@ -246,6 +248,9 @@ app.patch('/edit-blog/:blogId', authenticateToken, async (req, res) => {
     // Update the content field
     if (content) {
       blog.content = content;
+    }
+    if(visibility){
+      blog.visibility=visibility
     }
 
     // Save the updated blog post

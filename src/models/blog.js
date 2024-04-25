@@ -36,10 +36,15 @@ const blogSchema = new mongoose.Schema({
         required:true
     }
     ,
-    updatedAt: {
-        type: String,
-        default: Date.now
-    }
+    updatedAt: 
+        { type: Date,
+            default: Date.now ,
+            get:function() {
+                const date = this.get('updatedAt'); // Get the date value
+                return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+            }
+         }
+    
 
 
 });

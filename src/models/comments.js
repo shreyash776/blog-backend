@@ -24,7 +24,9 @@ const commentSchema = new mongoose.Schema({
    
     timestamp:
      { type: Date,
-       default: Date.now }
+       default: Date.now ,
+       get: v => v && v.toISOString().split('T')[0]
+    }
 
 });
 
