@@ -117,7 +117,7 @@ app.post('/signup', async (req, res) => {
     const blogs = await Blog.find();   
     // If there are no blogs, return a 404 status
     if (!blogs || blogs.length === 0) {
-      return res.status(404).json({ message: 'No blogs found' });
+      return res.status(404).json({ blogs:[], message: 'No blogs found' });
     }
 
     // If there are blogs, return them
@@ -182,13 +182,13 @@ app.post('/comments',authenticateToken,async (req, res) => {
 
 // <-------------- route for deleting blog ------------------>
 
-app.delete('/delete-blog/:blogId', authenticateToken, async (req, res) => {
-  const blogId = req.params.blogId;
-  const userId = req.user._id; // Extracting user ID from the authenticated request
+app.delete('/delete-blog', async (req, res) => {
+  const blogId = req.body.blogId;
+ 
   
   try {
     // Check if the blog post exists and belongs to the authenticated user
-    const blog = await Blog.findOne({ _id: blogId, user: userId });
+    const blog = await Blog.findOne({ _id: blogId});
     if (!blog) {
       return res.status(404).json({ message: 'Blog not found or unauthorized' });
     }
