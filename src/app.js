@@ -107,6 +107,8 @@ app.post('/signup', async (req, res) => {
 });
   
 
+
+
    
 
  // route to get the blogs from data base
@@ -129,7 +131,7 @@ app.post('/signup', async (req, res) => {
 });
 
 // testing api
-app.get('/testing', async (req, res) => {
+app.get('/', async (req, res) => {
   try {
 
 console.log("hhghh")
