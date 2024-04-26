@@ -34,9 +34,6 @@ app.post('/signup', async (req, res) => {
       // Create new user
       const newUser = new User({ name, email, password: hashedPassword });
       await newUser.save();
-  
-      // Generate JWT token
-      // const token = jwt.sign({ email: newUser.email }, 'secret_key');
       const token = jwt.sign({ _id: newUser._id.toString(), email: newUser.email,name:newUser.name }, secretKey);
 
       
@@ -128,7 +125,16 @@ app.post('/signup', async (req, res) => {
   }
 });
 
-
+// testing api
+app.get('/testing', async (req, res) => {
+  try {
+   
+   res.status(200).json("hello from sever side");
+ } catch (error) {
+   console.log("actual error:",error)
+   res.status(500).json({ message: 'Internal server error' });
+ }
+});
 
   
 
