@@ -17,6 +17,8 @@ app.use(bodyParser.json());
 require('dotenv').config();
 const secretKey = process.env.JWT_SECRET;
 
+console.log("I am running")
+
 // Signup route
 app.post('/signup', async (req, res) => {
     const { name, email, password } = req.body;
@@ -110,6 +112,7 @@ app.post('/signup', async (req, res) => {
  // route to get the blogs from data base
    app.get('/get-blogs', async (req, res) => {
    try {
+    console.log("getting blogs");
     // Fetch all blogs from the database
     const blogs = await Blog.find();   
     // If there are no blogs, return a 404 status
@@ -128,6 +131,8 @@ app.post('/signup', async (req, res) => {
 // testing api
 app.get('/testing', async (req, res) => {
   try {
+
+console.log("hhghh")
    
    res.status(200).json("hello from sever side");
  } catch (error) {
