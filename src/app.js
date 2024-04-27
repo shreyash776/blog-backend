@@ -11,6 +11,7 @@ const Blog =require("./models/blog");
 const Comment =require("./models/comments");
 const app = express();
 const cors=require('cors');
+const path = require('path');
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
@@ -18,6 +19,10 @@ require('dotenv').config();
 const secretKey = process.env.JWT_SECRET;
 
 console.log("I am running")
+
+
+app.use(express.static(path.join(__dirname, '../Wordcraft/dist')));
+
 
 // Signup route
 app.post('/signup', async (req, res) => {
