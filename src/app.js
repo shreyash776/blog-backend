@@ -154,17 +154,6 @@ app.get('/blogs/:blogId', async (req, res) => {
 });
 
 
-// testing api
-app.get("/", async (req, res) => {
-  try {
-    console.log("hhghh");
-
-    res.status(200).json("hello from sever side");
-  } catch (error) {
-    console.log("actual error:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
 
 //      <------- POST endpoint for submitting comments ---------->
 
