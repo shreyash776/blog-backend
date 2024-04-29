@@ -159,7 +159,9 @@ app.get('/blogs/:blogId', async (req, res) => {
 
 app.post("/comments", authenticateToken, async (req, res) => {
   try {
-    const { blogPostId, comment } = req.body;
+    // const {blogPostId, comment } = req.body;
+    const blogPostId =req.body.blogPostId;
+    const comment =req.body.comment;
     const commentedBy = req.user.name;
     const commentedByEmail = req.user.email;
     // Create a new comment document
