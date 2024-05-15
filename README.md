@@ -20,17 +20,17 @@ To get started with WordCraft, follow these simple steps:
 
 1. **Clone the Repository**: Clone the WordCraft repository to your local machine.
 
-2. **Navigate to the WordCraft Directory**: Change into the WordCraft directory.
+2. **Navigate to the WordCraft Directory**: Change into the WordCraft directory.`git clone https://github.com/yourusername/wordcraft.git`
 
-3. **Install Dependencies**: Install the necessary dependencies using npm install.
+3. **Install Dependencies**: Install the necessary dependencies using `npm install`.
 
-4. **Build the Application**: Build the application for production using npm run build.
+4. **Build the Application**: Build the application for production using `npm run build`.
 
-5. **Return to the Root Directory**: Navigate back to the root directory using cd..  .
+5. **Return to the Root Directory**: Navigate back to the root directory using `cd.. ` .
 
-6. **Install Root Dependencies**: Install the root dependencies using npm install.
+6. **Install Root Dependencies**: Install the root dependencies using` npm install`.
 
-7. **Run the Development Server**: Start the development server using npm run dev.
+7. **Run the Development Server**: Start the development server using` npm run dev`.
 
 8. **Access WordCraft**: Open your web browser and navigate to `http://localhost:3000` to access WordCraft.
 
