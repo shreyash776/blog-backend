@@ -17,8 +17,6 @@ app.use(bodyParser.json());
 require("dotenv").config();
 const secretKey = process.env.JWT_SECRET;
 
-console.log("I am running");
-
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "../Wordcraft/dist")));
@@ -200,7 +198,7 @@ app.get("/get-comments/:blogPostId", async (req, res) => {
 // <-------------- route for deleting blog ------------------>
 
 app.delete("/delete-blog", async (req, res) => {
-  const blogId = req.body.blogId;
+  const {blogId} = req.body;
 
   try {
     // Check if the blog post exists and belongs to the authenticated user
