@@ -38,3 +38,7 @@ Now you're ready to start blogging with WordCraft! Simply log in, create a new b
 
 
 
+https://github.com/shreyash776/blog-backend/assets/144803773/d80675c0-fdfd-4529-9bd4-eb349ddbd103
+
+
+
